@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Missão Sustentável — Mini Game Educativo</title>
+<meta name="author" content="Concepção: Tânia Reis Oliveira; Desenvolvimento: Plena Informática" />
+<meta name="color-scheme" content="light dark" />
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280;
+    --brand:#1e40af; --accent:#ff6b35; --ok:#10b981; --line:#e5e7eb;
+    --radius:14px;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:system-ui,Segoe UI,Roboto,Arial}
+  body{background:var(--bg);color:var(--ink)}
+  .top{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+       padding:12px 16px;background:#fff;border-bottom:1px solid var(--line)}
+  .brand{display:flex;gap:10px;align-items:center}
+  .dot{width:10px;height:10px;border-radius:999px;background:var(--accent)}
+  .brand h1{font-size:18px;margin:0}
+  .nav a{color:var(--brand);text-decoration:none;margin-left:14px;font-weight:700}
+  .nav a:hover{color:#243fb8}
+  .wrap{max-width:1100px;margin:0 auto;padding:22px 16px}
+
+  .hero{display:grid;gap:8px;margin-bottom:12px}
+  .hero h2{font-size:32px;margin:0}
+  .hero p{color:var(--muted);margin:0}
+
+  .bar{display:flex;align-items:center;gap:10px;margin:8px 0 16px}
+  .score{background:#fff;border:1px solid var(--line);padding:8px 12px;border-radius:999px;font-weight:800}
+  .btn{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .btn-outline{background:#fff;color:var(--brand);border:2px solid var(--brand)}
+  .hint{color:var(--muted);font-size:14px}
+
+  /* Área do jogo */
+  .game{
+    position:relative;background:#eaf1ff;border:1px solid var(--line);border-radius:18px;
+    height:min(70vh,600px);overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.08)
+  }
+
+  /* “Cenário” em SVG para não depender de imagens externas */
+  .scene{position:absolute;inset:0}
+  .scene svg{width:100%;height:100%}
+
+  /* Objetos clicáveis */
+  .obj{position:absolute;cursor:pointer;transform-origin:center;transition:transform .15s, opacity .2s}
+  .obj:hover{transform:scale(1.08)}
+  .obj[aria-disabled="true"]{opacity:.15;pointer-events:none}
+
+  /* Tooltip simples */
+  .tip{position:absolute;bottom:10px;left:10px;background:#fff;border:1px solid var(--line);
+       border-radius:10px;padding:10px 12px;max-width:min(640px,90%);box-shadow:0 10px 26px rgba(0,0,0,.08)}
+  .tip strong{color:var(--brand)}
+
+  /* Painel de ajuda */
+  .help{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);z-index:50}
+  .help[aria-hidden="false"]{display:flex}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;max-width:680px;width:92%;
+    box-shadow:0 40px 90px rgba(0,0,0,.25)
+  }
+  .card h3{margin:0 0 6px}
+  .card p{color:var(--muted);margin:0 0 8px}
+  .card ul{margin:6px 0 0 18px;color:var(--muted)}
+  .close{float:right;border:none;background:#fff;border:1px solid var(--line);border-radius:999px;width:36px;height:36px;cursor:pointer}
+
+  .creditos{
+    margin-top:18px;padding:16px 12px;text-align:center;color:#667187;background:#fff;border-top:1px solid #e7e9f3;font-size:14px
+  }
+  .creditos .sutitle{margin:6px 0 0;font-size:12px;opacity:.9}
+
+  @media(max-width:860px){.hero h2{font-size:26px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="dot"></span><h1>Missão Sustentável</h1></div>
+  <nav class="nav">
+    <a href="#jogo">Jogar</a>
+    <a href="#como">Como funciona</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <h2>Mini Game Educativo — Corrija hábitos e ganhe pontos</h2>
+    <p>Encontre e corriga atitudes anti-sustentáveis na sala: luz acesa, torneira aberta e lixo fora do cesto. Cada acerto vale <strong>10 pontos</strong> e libera uma dica pedagógica.</p>
+    <div class="bar">
+      <span id="score" class="score">Pontos: 0</span>
+      <button id="reset" class="btn btn-outline">Reiniciar</button>
+      <button id="helpBtn" class="btn">Ajuda</button>
+      <span class="hint">Dica: passe o mouse (ou toque) nos itens e clique para corrigir.</span>
+    </div>
+  </section>
+
+  <section id="jogo" class="game" aria-label="Cenário do jogo">
+    <!-- Fundo em SVG (parede, janela, quadro, mesa, lixeira) -->
+    <div class="scene" aria-hidden="true">
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="none">
+        <!-- parede -->
+        <rect x="0" y="0" width="1200" height="700" fill="#f1f5ff"/>
+        <!-- piso -->
+        <rect x="0" y="560" width="1200" height="140" fill="#e2e8f0"/>
+        <!-- janela -->
+        <rect x="820" y="120" width="260" height="170" rx="8" fill="#c7e1ff" stroke="#94bff2"/>
+        <line x1="820" y1="205" x2="1080" y2="205" stroke="#94bff2"/>
+        <line x1="950" y1="120" x2="950" y2="290" stroke="#94bff2"/>
+        <!-- quadro -->
+        <rect x="180" y="110" width="360" height="220" rx="10" fill="#0b132b"/>
+        <rect x="190" y="120" width="340" height="200" rx="6" fill="#1c2541"/>
+        <!-- mesa -->
+        <rect x="220" y="430" width="300" height="20" fill="#b08968"/>
+        <rect x="230" y="450" width="20" height="110" fill="#8d6e63"/>
+        <rect x="480" y="450" width="20" height="110" fill="#8d6e63"/>
+        <!-- lixeira -->
+        <rect x="700" y="510" width="70" height="100" rx="10" fill="#6ee7b7" stroke="#10b981"/>
+      </svg>
+    </div>
+
+    <!-- Objetos clicáveis -->
+    <!-- Lâmpada acesa -->
+    <div id="lamp" class="obj" role="button" aria-label="Lâmpada acesa. Clique para apagar." title="Apague a luz!"
+         style="top:6%; left:48%;">
+      <svg width="70" height="110" viewBox="0 0 70 110">
+        <ellipse cx="35" cy="40" rx="28" ry="30" fill="#fde68a" stroke="#f59e0b"/>
+        <rect x="28" y="70" width="14" height="20" rx="4" fill="#374151"/>
+        <rect x="26" y="90" width="18" height="12" rx="3" fill="#1f2937"/>
+      </svg>
+    </div>
+
+    <!-- Torneira aberta -->
+    <div id="tap" class="obj" role="button" aria-label="Torneira aberta. Clique para fechar." title="Feche a torneira!"
+         style="top:47%; left:34%;">
+      <svg width="90" height="70" viewBox="0 0 120 90">
+        <rect x="10" y="35" width="60" height="14" rx="7" fill="#94a3b8"/>
+        <rect x="60" y="28" width="12" height="28" rx="4" fill="#94a3b8"/>
+        <rect x="70" y="45" width="35" height="12" rx="6" fill="#94a3b8"/>
+        <!-- água -->
+        <path id="drop" d="M95 57 C100 70, 98 80, 95 88" stroke="#60a5fa" stroke-width="4" fill="none"/>
+      </svg>
+    </div>
+
+    <!-- Lixo no chão -->
+    <div id="trash" class="obj" role="button" aria-label="Lixo no chão. Clique para jogar no cesto." title="Jogue no cesto!"
+         style="top:76%; left:58%;">
+      <svg width="80" height="50" viewBox="0 0 120 60">
+        <rect x="6" y="25" width="38" height="22" rx="4" fill="#cbd5e1"/>
+        <rect x="46" y="30" width="22" height="16" rx="3" fill="#fca5a5"/>
+        <rect x="74" y="22" width="16" height="24" rx="3" fill="#fde68a"/>
+      </svg>
+    </div>
+
+    <!-- Mensagem pedagógica -->
+    <div id="tip" class="tip">
+      Encontre os <strong>3 erros ambientais</strong> na sala e clique para corrigi-los. Cada acerto vale 10 pontos.
+    </div>
+  </section>
+
+  <section id="como" style="margin-top:12px">
+    <p class="hint">Pressione <strong>ESC</strong> para fechar o painel de ajuda. O placar é salvo somente nesta sessão.</p>
+  </section>
+
+  <footer class="creditos">
+    <p><strong>Concepção pedagógica:</strong> Tânia Reis Oliveira • <strong>Desenvolvimento:</strong> Plena Informática</p>
+    <p class="sutitle">ReciclaTech • Projeto de Extensão – Pedagogia</p>
+  </footer>
+</div>
+
+<!-- Painel de ajuda -->
+<div id="help" class="help" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="card">
+    <button id="helpClose" class="close" aria-label="Fechar ajuda">×</button>
+    <h3>Como jogar</h3>
+    <p>Procure itens problemáticos e clique para “corrigir”. Cada correção soma pontos e mostra uma dica.</p>
+    <ul>
+      <li><strong>Lâmpada acesa:</strong> apague para economizar energia.</li>
+      <li><strong>Torneira aberta:</strong> feche para poupar água.</li>
+      <li><strong>Lixo no chão:</strong> coloque no cesto.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Estado do jogo
+  let score = 0;
+  const scoreEl = document.getElementById('score');
+  const tipEl = document.getElementById('tip');
+
+  const items = {
+    lamp: {
+      el: document.getElementById('lamp'),
+      done: false,
+      msg: "Você apagou a luz e economizou energia! 💡",
+      onFix: () => {
+        const bulb = items.lamp.el.querySelector('ellipse');
+        bulb.setAttribute('fill', '#dddddd');
+        bulb.setAttribute('stroke', '#9ca3af');
+      }
+    },
+    tap: {
+      el: document.getElementById('tap'),
+      done: false,
+      msg: "Você fechou a torneira e economizou água! 🚰",
+      onFix: () => {
+        const drop = items.tap.el.querySelector('#drop');
+        drop.setAttribute('stroke', 'transparent');
+      }
+    },
+    trash: {
+      el: document.getElementById('trash'),
+      done: false,
+      msg: "Você jogou o lixo no cesto! ♻️",
+      onFix: () => {
+        items.trash.el.style.transition = 'transform .3s, opacity .3s';
+        items.trash.el.style.transform = 'translate(90px, -40px) scale(.6)';
+        setTimeout(()=> items.trash.el.style.opacity = '0', 260);
+      }
+    }
+  };
+
+  function addPoints(n){
+    score += n;
+    scoreEl.textContent = 'Pontos: ' + score;
+  }
+
+  function handleClick(key){
+    const item = items[key];
+    if(item.done) return;
+    item.done = true;
+    addPoints(10);
+    tipEl.innerHTML = item.msg;
+    item.onFix();
+    item.el.setAttribute('aria-disabled','true');
+
+    // vitória: marca conclusão global para a Home V2
+    if(Object.values(items).every(i => i.done)){
+      setTimeout(()=>{
+        tipEl.innerHTML = "Parabéns! Você corrigiu todos os pontos. Que tal repetir com seus alunos e cronometrar o tempo?";
+        localStorage.setItem('missao-complete', 'true');
+      }, 350);
+    }
+  }
+
+  // Bind de cliques
+  items.lamp.el.addEventListener('click', ()=> handleClick('lamp'));
+  items.tap.el.addEventListener('click',  ()=> handleClick('tap'));
+  items.trash.el.addEventListener('click',()=> handleClick('trash'));
+
+  // Reiniciar
+  document.getElementById('reset').addEventListener('click', ()=>{
+    score = 0; scoreEl.textContent = 'Pontos: 0';
+    tipEl.innerHTML = 'Encontre os <strong>3 erros ambientais</strong> na sala e clique para corrigi-los. Cada acerto vale 10 pontos.';
+
+    for(const k in items){
+      items[k].done = false;
+      items[k].el.removeAttribute('aria-disabled');
+    }
+    // Reset visuais
+    items.lamp.el.querySelector('ellipse').setAttribute('fill','#fde68a');
+    items.lamp.el.querySelector('ellipse').setAttribute('stroke','#f59e0b');
+    items.tap.el.querySelector('#drop').setAttribute('stroke','#60a5fa');
+    items.trash.el.style.opacity = '1';
+    items.trash.el.style.transform = 'none';
+
+    // Opcional: limpar flag de conclusão global
+    // localStorage.removeItem('missao-complete');
+  });
+
+  // Ajuda
+  const help = document.getElementById('help');
+  document.getElementById('helpBtn').addEventListener('click', ()=>{
+    help.setAttribute('aria-hidden','false');
+  });
+  document.getElementById('helpClose').addEventListener('click', ()=>{
+    help.setAttribute('aria-hidden','true');
+  });
+  help.addEventListener('click', (e)=>{
+    if(e.target === help){ help.setAttribute('aria-hidden','true'); }
+  });
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){ help.setAttribute('aria-hidden','true'); }
+  });
+</script>
+</body>
+</html>

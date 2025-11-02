@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ReciclaLab — Laboratório Digital de Sustentabilidade</title>
+
+  <!-- Metadados / Créditos -->
+  <meta name="author" content="Concepção: Tânia Reis Oliveira; Desenvolvimento: Plena Informática" />
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>ReciclaLab</h1>
+    </div>
+    <nav class="nav">
+      <a href="#estacoes">Estações</a>
+      <a href="#progresso">Progresso</a>
+      <a href="#sobre">Sobre</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Laboratório Digital de Sustentabilidade</h2>
+      <p>Aprenda, explore e pratique: água, energia, resíduos e consumo consciente — 100% interativo, gratuito e fácil de aplicar em qualquer escola.</p>
+      <div class="cta-row">
+        <button class="btn" data-open="agua">Começar por Água</button>
+        <button class="btn btn-outline" data-open="energia">Começar por Energia</button>
+      </div>
+    </section>
+
+    <section id="progresso" class="progress">
+      <div class="progress-header">
+        <h3>Seu progresso</h3>
+        <button id="resetProgress" class="link">Limpar progresso</button>
+      </div>
+      <div class="bar">
+        <div id="barFill" class="bar-fill" style="width:0%"></div>
+      </div>
+      <p id="barLabel" class="small">0% concluído</p>
+    </section>
+
+    <section id="estacoes" class="grid">
+      <!-- Água -->
+      <article class="card">
+        <div class="icon icon-agua" aria-hidden="true"></div>
+        <h4>Água</h4>
+        <p>Uso racional, combate a vazamentos e práticas de economia no cotidiano escolar.</p>
+        <div class="actions">
+          <button class="btn sm" data-open="agua">Abrir estação</button>
+          <a class="link sm" href="#" target="_blank" rel="noopener">Guia/QR (placeholder)</a>
+        </div>
+      </article>
+
+      <!-- Energia -->
+      <article class="card">
+        <div class="icon icon-energia" aria-hidden="true"></div>
+        <h4>Energia</h4>
+        <p>Iluminação, equipamentos, ventilação e hábitos para reduzir consumo.</p>
+        <div class="actions">
+          <button class="btn sm" data-open="energia">Abrir estação</button>
+          <a class="link sm" href="#" target="_blank" rel="noopener">Apresentação (placeholder)</a>
+        </div>
+      </article>
+
+      <!-- Resíduos -->
+      <article class="card">
+        <div class="icon icon-residuos" aria-hidden="true"></div>
+        <h4>Resíduos</h4>
+        <p>Coleta seletiva, triagem simples e reaproveitamento criativo.</p>
+        <div class="actions">
+          <button class="btn sm" data-open="residuos">Abrir estação</button>
+          <a class="link sm" href="#" target="_blank" rel="noopener">Modelos (placeholder)</a>
+        </div>
+      </article>
+
+      <!-- Consumo -->
+      <article class="card">
+        <div class="icon icon-consumo" aria-hidden="true"></div>
+        <h4>Consumo consciente</h4>
+        <p>Compras, impressões, copos/garrafas e escolhas que evitam desperdício.</p>
+        <div class="actions">
+          <button class="btn sm" data-open="consumo">Abrir estação</button>
+          <a class="link sm" href="#" target="_blank" rel="noopener">Quiz (placeholder)</a>
+        </div>
+      </article>
+    </section>
+
+    <section id="sobre" class="about">
+      <h3>Sobre o ReciclaLab</h3>
+      <p>Protótipo educacional pensado para escolas públicas: leve, offline-friendly e expansível. Integre QR Codes, formulários e dashboards quando desejar — tudo com ferramentas gratuitas.</p>
+      <ul class="bullets">
+        <li>Sem dependências externas (HTML+CSS+JS puro)</li>
+        <li>Responsivo e acessível (teclado/ESC nos modais)</li>
+        <li>Progresso salvo no navegador (localStorage)</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="creditos">
+    <p>
+      <strong>Concepção pedagógica:</strong> Tânia Reis Oliveira •
+      <strong>Desenvolvimento:</strong> Plena Informática
+    </p>
+    <p class="sutitle">EduTech SJC • Projeto de Extensão – Pedagogia</p>
+  </footer>
+
+  <!-- MODAIS (estações) -->
+  <!-- Água -->
+  <div class="modal" id="modal-agua" role="dialog" aria-modal="true" aria-labelledby="titulo-agua" aria-hidden="true">
+    <div class="modal__content" tabindex="-1">
+      <button class="modal__close" aria-label="Fechar" data-close>&times;</button>
+      <h4 id="titulo-agua">Estação: Água</h4>
+      <p class="lead">Feche a torneira, reporte vazamentos e use recipientes reaproveitados. Pequenas ações geram grandes economias.</p>
+
+      <div class="steps">
+        <details>
+          <summary>1) Caça-vazamentos na escola</summary>
+          <p>Crie uma dupla de alunos-monitores e verifiquem banheiros e pias. Registrem “ok” ou “vazando” e informem à coordenação.</p>
+        </details>
+        <details>
+          <summary>2) Garrafas e copos reutilizáveis</summary>
+          <p>Evitem copos descartáveis. Estimulem o uso de garrafas individuais e pontos de reabastecimento de água.</p>
+        </details>
+        <details>
+          <summary>3) Mural “Dicas de Economia”</summary>
+          <p>Monte um mural com dicas e dados da turma (estime litros poupados por semana).</p>
+        </details>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" data-done="agua">Marcar como aprendido</button>
+        <a class="btn btn-outline" href="#" target="_blank" rel="noopener">Guia/QR (placeholder)</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Energia -->
+  <div class="modal" id="modal-energia" role="dialog" aria-modal="true" aria-labelledby="titulo-energia" aria-hidden="true">
+    <div class="modal__content" tabindex="-1">
+      <button class="modal__close" aria-label="Fechar" data-close>&times;</button>
+      <h4 id="titulo-energia">Estação: Energia</h4>
+      <p class="lead">Apague a luz ao sair, aproveite a luz natural e desligue equipamentos em standby.</p>
+
+      <div class="steps">
+        <details>
+          <summary>1) Cartazes “Apague e economize”</summary>
+          <p>Placas simples próximas ao interruptor ajudam a criar hábitos positivos em toda a turma.</p>
+        </details>
+        <details>
+          <summary>2) Rota de verificação</summary>
+          <p>Ao final do turno, a equipe verifica salas vazias com luz acesa. Registre e celebre melhorias semanais.</p>
+        </details>
+        <details>
+          <summary>3) Ventilação e conforto térmico</summary>
+          <p>Abra janelas, cruze correntes de ar e priorize ventilação natural quando possível.</p>
+        </details>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" data-done="energia">Marcar como aprendido</button>
+        <a class="btn btn-outline" href="#" target="_blank" rel="noopener">Apresentação (placeholder)</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resíduos -->
+  <div class="modal" id="modal-residuos" role="dialog" aria-modal="true" aria-labelledby="titulo-residuos" aria-hidden="true">
+    <div class="modal__content" tabindex="-1">
+      <button class="modal__close" aria-label="Fechar" data-close>&times;</button>
+      <h4 id="titulo-residuos">Estação: Resíduos</h4>
+      <p class="lead">Separe corretamente: papel, plástico, metal e orgânico. Sinalize pontos de coleta e faça triagens rápidas.</p>
+
+      <div class="steps">
+        <details>
+          <summary>1) Pontos de coleta seletiva</summary>
+          <p>Quatro lixeiras ou caixas identificadas já resolvem. Coloque-as onde o fluxo é maior.</p>
+        </details>
+        <details>
+          <summary>2) Triagem express no recreio</summary>
+          <p>Monitores ajudam por 5 minutos após o recreio para evitar mistura de resíduos.</p>
+        </details>
+        <details>
+          <summary>3) Reaproveitamento criativo</summary>
+          <p>Brinquedos, porta-lápis e decoração com embalagens. Registre com fotos para o mural.</p>
+        </details>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" data-done="residuos">Marcar como aprendido</button>
+        <a class="btn btn-outline" href="#" target="_blank" rel="noopener">Modelos (placeholder)</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consumo -->
+  <div class="modal" id="modal-consumo" role="dialog" aria-modal="true" aria-labelledby="titulo-consumo" aria-hidden="true">
+    <div class="modal__content" tabindex="-1">
+      <button class="modal__close" aria-label="Fechar" data-close>&times;</button>
+      <h4 id="titulo-consumo">Estação: Consumo Consciente</h4>
+      <p class="lead">Antes de comprar ou imprimir, pergunte: é necessário? Planejar evita desperdício e reduz custos.</p>
+
+      <div class="steps">
+        <details>
+          <summary>1) Impressões responsáveis</summary>
+          <p>Use frente e verso, reduza margens e prefira versões digitais quando possível.</p>
+        </details>
+        <details>
+          <summary>2) Materiais duráveis</summary>
+          <p>Prefira itens recarregáveis e duráveis (canetas, pilhas, garrafas).</p>
+        </details>
+        <details>
+          <summary>3) Compras planejadas</summary>
+          <p>Faça listas, compare e avalie reuso antes de adquirir algo novo.</p>
+        </details>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" data-done="consumo">Marcar como aprendido</button>
+        <a class="btn btn-outline" href="#" target="_blank" rel="noopener">Quiz (placeholder)</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="backdrop" data-close aria-hidden="true"></div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

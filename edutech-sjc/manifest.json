@@ -1,0 +1,14 @@
+{
+  "name": "ReciclaTech — Laboratório Digital de Sustentabilidade",
+  "short_name": "ReciclaTech",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#1e40af",
+  "description": "Projeto educacional interativo criado por Tânia Reis e Plena Informática para escolas públicas.",
+  "icons": [
+    { "src": "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ciclo do Lixo — Animação Educacional</title>
+<meta name="author" content="Concepção: Tânia Reis Oliveira; Desenvolvimento: Plena Informática">
+<meta name="color-scheme" content="light dark">
+<style>
+:root{
+  --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280;
+  --brand:#1e40af; --accent:#ff6b35; --ok:#10b981; --line:#e5e7eb;
+  --radius:14px;
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0;font-family:system-ui,Segoe UI,Roboto,Arial}
+body{background:var(--bg);color:var(--ink)}
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:12px 16px
+}
+.brand{display:flex;gap:10px;align-items:center}
+.dot{width:10px;height:10px;border-radius:999px;background:var(--accent)}
+.brand h1{font-size:18px;margin:0}
+.top a{color:var(--brand);text-decoration:none;font-weight:800;margin-left:12px}
+.top a:hover{color:#243fb8}
+
+.wrap{max-width:1100px;margin:0 auto;padding:22px 16px}
+.hero{text-align:center;margin:8px 0 18px}
+.hero h2{margin:0 0 6px;font-size:32px}
+.hero p{margin:0;color:var(--muted)}
+
+.flow{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;box-shadow:0 14px 40px rgba(0,0,0,.06)
+}
+.controls{display:flex;gap:10px;justify-content:center;margin:6px 0 10px}
+.btn{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-outline{background:#fff;color:var(--brand);border:2px solid var(--brand)}
+.caption{color:var(--muted);text-align:center;margin:4px 0 8px}
+
+.grid{
+  display:grid;grid-template-columns:repeat(6,minmax(180px,1fr));gap:14px;align-items:stretch;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px
+}
+.step{
+  background:linear-gradient(#ffffff,#fbfbff);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;min-width:200px;scroll-snap-align:center;display:flex;flex-direction:column;gap:6px
+}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;color:#fff}
+.b1{background:#1e88e5}.b2{background:#ef4444}.b3{background:#8b5cf6}
+.b4{background:#f59e0b}.b5{background:#10b981}.b6{background:#0ea5e9}
+.step h4{margin:2px 0 4px}
+.step p{margin:0;color:var(--muted);font-size:14px}
+
+.arrow{height:44px;display:flex;align-items:center;justify-content:center}
+.arrow svg{width:44px;height:44px;stroke:var(--brand);stroke-width:2;fill:none}
+.arrow svg .dash{stroke-dasharray:60;stroke-dashoffset:60;animation:draw 1.2s linear infinite}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+.panel{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.box h5{margin:0 0 6px}.box p{margin:0;color:var(--muted)}
+ul.clean{margin:8px 0 0 18px;color:var(--muted)}
+ul.clean li{margin:4px 0}
+
+.creditos{
+  margin-top:24px;padding:16px 12px;text-align:center;color:#667187;background:#fff;border-top:1px solid #e7e9f3;font-size:14px
+}
+.creditos .sutitle{margin:6px 0 0;font-size:12px;opacity:.9}
+
+@media(max-width:880px){.panel{grid-template-columns:1fr}.hero h2{font-size:26px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="dot"></span><h1>Ciclo do Lixo</h1></div>
+  <nav>
+    <a href="#fluxo">Fluxo</a>
+    <a href="#acoes">Ações</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <h2>Animação Educacional — Do Consumo ao Reuso</h2>
+    <p>Visualize o caminho dos resíduos e discuta com a turma como reduzir, separar e reaproveitar. Cada etapa traz exemplos práticos para aplicar na escola.</p>
+  </section>
+
+  <section id="fluxo" class="flow">
+    <div class="controls">
+      <button class="btn-outline" id="prev" disabled>◀ Anterior</button>
+      <button class="btn" id="next">Próximo ▶</button>
+    </div>
+    <p class="caption" id="cap">Etapa 1 de 6 — Consumo</p>
+
+    <div class="grid" id="grid">
+      <div class="step" data-cap="Etapa 1 de 6 — Consumo">
+        <span class="badge b1">Consumo</span>
+        <h4>Compra & Uso</h4>
+        <p>Planeje o necessário. Prefira itens duráveis, recarregáveis e com menos embalagens.</p>
+      </div>
+
+      <div class="arrow">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dash" d="M2 24 H34"></path>
+          <polyline points="34,16 46,24 34,32"></polyline>
+        </svg>
+      </div>
+
+      <div class="step" data-cap="Etapa 2 de 6 — Descarte">
+        <span class="badge b2">Descarte</span>
+        <h4>Pós-uso</h4>
+        <p>Separe o resíduo corretamente no momento do descarte para evitar mistura.</p>
+      </div>
+
+      <div class="arrow">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dash" d="M2 24 H34"></path>
+          <polyline points="34,16 46,24 34,32"></polyline>
+        </svg>
+      </div>
+
+      <div class="step" data-cap="Etapa 3 de 6 — Coleta">
+        <span class="badge b3">Coleta</span>
+        <h4>Transporte</h4>
+        <p>Coleta municipal ou parcerias locais. Mantenha os pontos de coleta sinalizados.</p>
+      </div>
+
+      <div class="arrow">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dash" d="M2 24 H34"></path>
+          <polyline points="34,16 46,24 34,32"></polyline>
+        </svg>
+      </div>
+
+      <div class="step" data-cap="Etapa 4 de 6 — Triagem">
+        <span class="badge b4">Triagem</span>
+        <h4>Separação fina</h4>
+        <p>Classifique por tipo (papel, plástico, metal, vidro) e retire contaminantes.</p>
+      </div>
+
+      <div class="arrow">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dash" d="M2 24 H34"></path>
+          <polyline points="34,16 46,24 34,32"></polyline>
+        </svg>
+      </div>
+
+      <div class="step" data-cap="Etapa 5 de 6 — Reciclagem">
+        <span class="badge b5">Reciclagem</span>
+        <h4>Transformação</h4>
+        <p>Materiais retornam à cadeia produtiva como novas matérias-primas.</p>
+      </div>
+
+      <div class="arrow">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dash" d="M2 24 H34"></path>
+          <polyline points="34,16 46,24 34,32"></polyline>
+        </svg>
+      </div>
+
+      <div class="step" data-cap="Etapa 6 de 6 — Reuso">
+        <span class="badge b6">Reuso</span>
+        <h4>Novo ciclo</h4>
+        <p>Reaproveitar prolonga a vida útil e reduz a necessidade de novas compras.</p>
+      </div>
+    </div>
+
+    <p class="caption">Dica: use as setas do teclado (← →) para navegar; Tab foca os cartões.</p>
+  </section>
+
+  <section id="acoes" class="panel">
+    <div class="box">
+      <h5>Atividade 1 — Caça aos Pontos de Melhoria</h5>
+      <p>Em duplas, identifiquem na escola exemplos de cada etapa. Registrem com fotos e preparem legendas explicativas.</p>
+      <ul class="clean">
+        <li>Consumo: materiais descartáveis em excesso?</li>
+        <li>Descarte: lixeiras suficientes e sinalizadas?</li>
+        <li>Coleta: ponto de coleta acessível?</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h5>Atividade 2 — Mapa do Fluxo</h5>
+      <p>Monte um painel com setas e exemplos reais da escola. Atualize mensalmente e acompanhe melhorias.</p>
+      <ul class="clean">
+        <li>Triagem: há mistura de resíduos?</li>
+        <li>Reciclagem: parceria local identificada?</li>
+        <li>Reuso: ideias criativas da turma (porta-lápis, jogos, etc.)</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="creditos">
+    <p><strong>Concepção pedagógica:</strong> Tânia Reis Oliveira • <strong>Desenvolvimento:</strong> Plena Informática</p>
+    <p class="sutitle">ReciclaTech • Projeto de Extensão – Pedagogia</p>
+  </footer>
+</div>
+
+<script>
+const grid = document.getElementById('grid');
+const cap  = document.getElementById('cap');
+const steps = [...grid.querySelectorAll('.step')];
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+
+let idx = 0;
+function update(){
+  const el = steps[idx];
+  el.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  cap.textContent = el.dataset.cap || `Etapa ${idx+1} de ${steps.length}`;
+  prev.disabled = idx===0;
+  next.disabled = idx===steps.length-1;
+
+  // Se chegou ao último cartão, marca como concluído globalmente (lido pela Home V2)
+  if (idx === steps.length - 1) {
+    localStorage.setItem('ciclolixo-complete', 'true');
+  }
+}
+prev.addEventListener('click', ()=>{ idx=Math.max(0,idx-1); update(); });
+next.addEventListener('click', ()=>{ idx=Math.min(steps.length-1,idx+1); update(); });
+
+// Teclado
+window.addEventListener('keydown', (e)=>{
+  if (e.key==='ArrowRight') next.click();
+  if (e.key==='ArrowLeft')  prev.click();
+});
+
+// Inicial
+update();
+</script>
+</body>
+</html>

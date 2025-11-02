@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReciclaTech — Laboratório Digital de Sustentabilidade</title>
+<meta name="author" content="Concepção: Tânia Reis Oliveira; Desenvolvimento: Plena Informática">
+<meta name="color-scheme" content="light dark">
+<link rel="manifest" href="./manifest.json">
+<style>
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--ink:#111827;--muted:#6b7280;
+  --brand:#1e40af;--accent:#ff6b35;--line:#e5e7eb;--radius:14px;
+}
+*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:system-ui,Segoe UI,Roboto,Arial}
+body{background:var(--bg);color:var(--ink)}
+/* Alto contraste */
+body.hc{--bg:#0a0a0a;--card:#111;--ink:#fff;--muted:#d1d5db;--brand:#60a5fa;--accent:#f59e0b;--line:#333}
+header{
+  background:var(--card);border-bottom:1px solid var(--line);
+  padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:10
+}
+.brand{display:flex;align-items:center;gap:10px}
+.dot{width:12px;height:12px;border-radius:999px;background:var(--accent)}
+.brand h1{margin:0;font-size:20px;color:var(--brand)}
+nav a{margin-left:18px;text-decoration:none;color:var(--brand);font-weight:700}
+nav a:hover{color:var(--accent)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{
+  background:var(--brand);color:#fff;border:none;padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer
+}
+.btn-outline{background:#fff;color:var(--brand);border:2px solid var(--brand)}
+.btn-muted{background:#e5e7eb;color:#111;font-weight:700;border-radius:10px;border:none}
+main{max-width:1050px;margin:0 auto;padding:24px 20px}
+.head{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.head .lead{color:var(--muted);margin:6px 0 0}
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap
+}
+.avatar{
+  width:44px;height:44px;border-radius:999px;background:linear-gradient(135deg,var(--brand),var(--accent));
+  color:#fff;display:grid;place-items:center;font-weight:900
+}
+.input{display:flex;gap:8px;align-items:center}
+.input input{
+  padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);min-width:220px
+}
+.progress{
+  margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px
+}
+.progress h3{margin:0 0 6px}
+.bar{height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--brand),var(--accent));width:0%}
+.bar-label{margin-top:6px;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;box-shadow:0 6px 24px rgba(0,0,0,.06);
+  display:flex;flex-direction:column;gap:10px
+}
+.card h3{margin:0;color:var(--brand)}
+.card p{margin:0;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.link.btn{display:inline-block;text-decoration:none;text-align:center}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef2ff;color:var(--brand);font-weight:800;font-size:12px}
+.badge.done{background:#def7ec;color:#047857}
+footer{
+  margin:20px 0 0;padding:18px 14px;text-align:center;color:#667187;background:var(--card);border-top:1px solid var(--line);font-size:14px
+}
+footer .sutitle{margin:6px 0 0;font-size:12px;opacity:.9}
+/* Certificado (aparece só na impressão) */
+#cert{display:none}
+@media print{
+  header,nav,.controls,.panel,.progress,.grid,footer{display:none !important}
+  #cert{display:block;padding:40px;font-family:serif}
+  #cert h1{font-size:28px;margin:0 0 10px}
+  #cert p{font-size:16px;line-height:1.6}
+  #cert .sign{margin-top:40px;display:flex;justify-content:space-between}
+  #cert .sign div{width:40%;text-align:center}
+  #cert .sign hr{border:0;border-top:1px solid #000;margin:30px 0 6px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="dot"></span><h1>ReciclaTech</h1></div>
+  <nav>
+    <a href="#modulos">Módulos</a>
+    <a href="#sobre">Sobre</a>
+  </nav>
+  <div class="controls">
+    <button id="btnAcess" class="btn-outline" aria-pressed="false" title="Modo Acessível (alto contraste e fontes maiores)">Acessibilidade</button>
+    <button id="btnNarrar" class="btn" title="Narrar resumo da página">Narrar</button>
+    <button id="btnParar" class="btn-muted" title="Parar narração">Parar</button>
+  </div>
+</header>
+
+<main>
+  <section class="head" aria-labelledby="titulo">
+    <div>
+      <h2 id="titulo">Laboratório Digital de Sustentabilidade</h2>
+      <p class="lead">Projeto pedagógico interativo para escolas públicas – módulos práticos sobre água, energia, resíduos e consumo consciente.</p>
+    </div>
+    <div class="panel" aria-label="Perfil e ações rápidas">
+      <div class="avatar" id="avatar">RT</div>
+      <div class="input">
+        <label for="nome" class="sr-only">Seu nome</label>
+        <input id="nome" type="text" placeholder="Nome do aluno/professor" autocomplete="name">
+        <button id="btnCert" class="btn" title="Gerar certificado de participação">Certificado</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="progress" aria-labelledby="progTitle">
+    <h3 id="progTitle">Progresso geral</h3>
+    <div class="bar" aria-hidden="true"><div id="barFill" class="bar-fill"></div></div>
+    <div class="bar-label"><span id="barText">0% concluído</span> • <span id="badges"></span></div>
+  </section>
+
+  <section id="modulos" class="grid" aria-label="Módulos do ReciclaTech">
+    <article class="card">
+      <span id="bReciclaLab" class="badge">Em andamento</span>
+      <h3>🧪 ReciclaLab</h3>
+      <p>Laboratório digital interativo com estações de Água, Energia, Resíduos e Consumo. Salva progresso local.</p>
+      <div class="row">
+        <a class="link btn" href="reciclalab/index.html">Acessar</a>
+        <button class="btn-outline" data-toggle="reciclalab">Marcar concluído</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <span id="bMissao" class="badge">Em andamento</span>
+      <h3>🕹️ Missão Sustentável</h3>
+      <p>Mini game educativo de correção de hábitos – energia, água e resíduos. Ideal para abertura da trilha.</p>
+      <div class="row">
+        <a class="link btn" href="missao-sustentavel/index.html">Jogar</a>
+        <button class="btn-outline" data-toggle="missao">Marcar concluído</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <span id="bCiclo" class="badge">Em andamento</span>
+      <h3>🔁 Ciclo do Lixo</h3>
+      <p>Painel animado do consumo ao reuso, com atividades práticas para aplicação em sala.</p>
+      <div class="row">
+        <a class="link btn" href="ciclo-do-lixo/ciclo-do-lixo.html">Explorar</a>
+        <button class="btn-outline" data-toggle="ciclolixo">Marcar concluído</button>
+      </div>
+    </article>
+  </section>
+
+  <section id="sobre" style="margin-top:22px">
+    <h3>Sobre o Projeto</h3>
+    <p class="lead">O ReciclaTech nasceu como proposta de extensão universitária e evoluiu para um ecossistema educacional aberto. É leve, instalável (PWA) e funciona offline com Service Worker.</p>
+  </section>
+</main>
+
+<footer>
+  <p><strong>Concepção pedagógica:</strong> Tânia Reis Oliveira • <strong>Desenvolvimento:</strong> Plena Informática</p>
+  <p class="sutitle">ReciclaTech © 2025 • EduTech SJC</p>
+</footer>
+
+<!-- Certificado imprimível -->
+<section id="cert" aria-hidden="true">
+  <h1>Certificado de Participação — ReciclaTech</h1>
+  <p>
+    Certificamos que <strong id="certNome">________________</strong> participou das atividades do
+    <em>ReciclaTech — Laboratório Digital de Sustentabilidade</em>, envolvendo os módulos ReciclaLab, Missão Sustentável e Ciclo do Lixo,
+    demonstrando compromisso com práticas ambientais e cidadania.
+  </p>
+  <p id="certData"></p>
+  <div class="sign">
+    <div>
+      <hr>
+      <small>Coordenação • Escola/Projeto</small>
+    </div>
+    <div>
+      <hr>
+      <small>Concepção: Tânia Reis • Desenvolvimento: Plena Informática</small>
+    </div>
+  </div>
+</section>
+
+<script>
+// ===== Acessibilidade (alto contraste) =====
+const btnAcess = document.getElementById('btnAcess');
+btnAcess.addEventListener('click', ()=>{
+  const hc = document.body.classList.toggle('hc');
+  btnAcess.setAttribute('aria-pressed', hc ? 'true' : 'false');
+});
+
+// ===== Narração (SpeechSynthesis) =====
+const synth = window.speechSynthesis;
+const btnNarrar = document.getElementById('btnNarrar');
+const btnParar  = document.getElementById('btnParar');
+function narrar(texto){
+  if(!('speechSynthesis' in window)) return alert('Narração não suportada neste navegador.');
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(texto);
+  u.lang = 'pt-BR'; u.rate = 1; u.pitch = 1;
+  synth.speak(u);
+}
+btnNarrar.addEventListener('click', ()=>{
+  const resumo = document.querySelector('.lead')?.innerText || '';
+  narrar('Bem-vindo ao ReciclaTech. ' + resumo);
+});
+btnParar.addEventListener('click', ()=> synth.cancel());
+
+// ===== Avatar / Nome =====
+const nomeInput = document.getElementById('nome');
+const avatarEl  = document.getElementById('avatar');
+const storedName = localStorage.getItem('rt-name') || '';
+nomeInput.value = storedName;
+function initials(n){ return (n||'R T').split(' ').slice(0,2).map(x=>x[0]?.toUpperCase()||'').join('') || 'RT'; }
+avatarEl.textContent = initials(storedName);
+nomeInput.addEventListener('input', ()=>{
+  localStorage.setItem('rt-name', nomeInput.value.trim());
+  avatarEl.textContent = initials(nomeInput.value.trim());
+});
+
+// ===== Progresso Global =====
+const keys = {
+  reciclalab: 'reciclalab-progress', // objeto {agua,energia,residuos,consumo}
+  missao: 'missao-complete',         // boolean "true"
+  ciclolixo: 'ciclolixo-complete'    // boolean "true"
+};
+function isReciclaLabDone(){
+  const p = JSON.parse(localStorage.getItem(keys.reciclalab) || '{}');
+  return ['agua','energia','residuos','consumo'].every(k => p[k]);
+}
+function isTrue(key){ return localStorage.getItem(key) === 'true'; }
+
+const bRec = document.getElementById('bReciclaLab');
+const bMis = document.getElementById('bMissao');
+const bCic = document.getElementById('bCiclo');
+const barFill = document.getElementById('barFill');
+const barText = document.getElementById('barText');
+const badgesSpan = document.getElementById('badges');
+
+function badge(el, done){ el.className = 'badge ' + (done ? 'done' : ''); el.textContent = done ? 'Concluído' : 'Em andamento'; }
+function updateProgress(){
+  const doneRec = isReciclaLabDone();
+  const doneMis = isTrue(keys.missao);
+  const doneCic = isTrue(keys.ciclolixo);
+  badge(bRec, doneRec); badge(bMis, doneMis); badge(bCic, doneCic);
+  const doneCount = [doneRec, doneMis, doneCic].filter(Boolean).length;
+  const pct = Math.round((doneCount/3)*100);
+  barFill.style.width = pct + '%';
+  barText.textContent = pct + '% concluído';
+  badgesSpan.textContent = `Módulos concluídos: ${doneCount}/3`;
+}
+updateProgress();
+
+// Toggle manual de conclusão por módulo (útil para escolas sem internet)
+document.querySelectorAll('[data-toggle]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const mod = btn.getAttribute('data-toggle');
+    if(mod === 'reciclalab'){
+      // marcar tudo como true no objeto
+      const cur = JSON.parse(localStorage.getItem(keys.reciclalab) || '{}');
+      const novo = {agua:true, energia:true, residuos:true, consumo:true, ...cur};
+      localStorage.setItem(keys.reciclalab, JSON.stringify(novo));
+    } else if (mod === 'missao'){
+      localStorage.setItem(keys.missao, isTrue(keys.missao) ? 'false' : 'true');
+    } else if (mod === 'ciclolixo'){
+      localStorage.setItem(keys.ciclolixo, isTrue(keys.ciclolixo) ? 'false' : 'true');
+    }
+    updateProgress();
+  });
+});
+
+// ===== Certificado (print) =====
+const btnCert = document.getElementById('btnCert');
+btnCert.addEventListener('click', ()=>{
+  const nome = (document.getElementById('nome').value || 'Participante').trim();
+  document.getElementById('certNome').textContent = nome;
+  const data = new Date();
+  const fmt = data.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+  document.getElementById('certData').textContent = 'Emitido em ' + fmt + '.';
+  window.print();
+});
+
+// ===== PWA: Service Worker =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js')
+    .then(()=>console.log('✅ SW ativo (offline pronto)'))
+    .catch(err=>console.warn('SW falhou', err));
+}
+</script>
+</body>
+</html>
